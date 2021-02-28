@@ -40,5 +40,7 @@ int main(int argc, char** argv){
 	}
 	kill_lsthread(&t1);
 	kill_lsthread(&t2);
+	destroy_lsthread(&t1);
+	destroy_lsthread(&t2);
 	return 0;
 }
