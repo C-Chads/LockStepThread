@@ -7,7 +7,7 @@ int var_t2 = 0;
 int var_t1 = 0;
 
 void thread1_func(){
-	for(int i = 0; i < 1000; i++)
+	for(int i = 0; i < 100000000; i++)
 		if(i == 300)
 			var_t1++;
 	printf("Thread1_func, %d\n", var_t1);
