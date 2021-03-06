@@ -1,5 +1,5 @@
 CC= gcc
-CFLAGS= -O3
+CFLAGS= -O3 -std=gnu99
 
 all:
 	$(CC) $(CFLAGS) worker.c -o worker.out -lpthread -lm

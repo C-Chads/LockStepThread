@@ -5,10 +5,10 @@
 #include "tpool.h"
 
 #define NWORKERS 8
-#define NWORKERSPOW 5
-#define NWORKERSSQRT 3
-#define SQRT_COUNT (NWORKERSSQRT * (1<<15))
-#define POW_COUNT (NWORKERSPOW * (1<<15))
+#define NWORKERSPOW 7
+#define NWORKERSSQRT 7
+#define SQRT_COUNT (NWORKERSSQRT * (1<<18))
+#define POW_COUNT (NWORKERSPOW * (1<<18))
 
 double sqrtData[SQRT_COUNT];
 double powData[POW_COUNT];
@@ -19,6 +19,7 @@ typedef struct{
 }myarg;
 
 //Declare a thread pool of max 20 threads.
+TPOOL_EXTERN(mypool, NWORKERS, myarg);
 TPOOL(mypool, NWORKERS, myarg);
 
 void workerFuncSqrt(void* arg){
@@ -45,7 +46,7 @@ void workerFuncPow(void* arg){
 
 
 int main(){
-	mypool_init();
+	mypool_init(NWORKERS);
 	int tids[NWORKERSSQRT];
 	int tids2[NWORKERSPOW];
 	//Assign sqrt workers.
