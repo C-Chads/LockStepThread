@@ -7,8 +7,8 @@
 #define NWORKERS 8
 #define NWORKERSPOW 7
 #define NWORKERSSQRT 7
-#define SQRT_COUNT (NWORKERSSQRT * (1<<18))
-#define POW_COUNT (NWORKERSPOW * (1<<18))
+#define SQRT_COUNT (NWORKERSSQRT * (1<<24))
+#define POW_COUNT (NWORKERSPOW * (1<<24))
 
 double sqrtData[SQRT_COUNT];
 double powData[POW_COUNT];
