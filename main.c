@@ -17,7 +17,7 @@ void thread2_func(){
 	for(int i = 0; i < 1000; i++)
 		if(i == 300)
 			var_t2++;
-	printf("Thread2_func, %d\n", var_t2);
+	//printf("Thread2_func, %d\n", var_t2);
 }
 
 int main(int argc, char** argv){
@@ -30,13 +30,11 @@ int main(int argc, char** argv){
 	start_lsthread(&t2);
 //	if(0)
 	for(int i = 0; i < 30; i++){
-
-		lock(&t1);
-		lock(&t2);
-
 		step(&t1);
 		step(&t2);
-
+		lock(&t1);
+		lock(&t2);
+		printf("I believe t1 is , %d and t2 is %d \n", var_t1, var_t2);
 	}
 	kill_lsthread(&t1);
 	kill_lsthread(&t2);
