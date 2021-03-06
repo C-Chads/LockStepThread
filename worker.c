@@ -3,30 +3,25 @@
 #include <stdio.h>
 #define LOCKSTEPTHREAD_IMPL
 #include "lockstepthread.h"
-#define SQRT_COUNT 111111111
-#define POW_COUNT 111111111
-#define NWORKERS 2
 
+#define NWORKERS 20
+#define SQRT_COUNT (NWORKERS * 10000)
 //Multipurpose macro.
 #define MTXSTAT(var, val, mtx) pthread_mutex_lock(&mtx); var = val; pthread_mutex_unlock(&mtx);
 pthread_mutex_t wMtx[NWORKERS];
 int wStatuses[NWORKERS] = {0};
 
 double sqrtData[SQRT_COUNT];
-double powData[POW_COUNT];
 
 //if you don't want to duplicate code, you can use arg.
 
-void workerFuncPow(void* arg){
-	for(int i = 0; i < SQRT_COUNT; i++)
-		powData[i] = pow((double)i, 3);	
-	MTXSTAT(wStatuses[0], 2, wMtx[0]);
-}
-
 void workerFuncSqrt(void* arg){
-	for(int i = 0; i < SQRT_COUNT; i++)
-		sqrtData[i] = sqrt((double)i);
-	MTXSTAT(wStatuses[1], 2, wMtx[1]);
+	size_t id = ((size_t)arg);
+	//We have to determine where in the array we're writing it.
+	size_t off = id * SQRT_COUNT/NWORKERS;
+	for(size_t i = 0; i < (SQRT_COUNT / NWORKERS) && (i+off < SQRT_COUNT); i++)
+		sqrtData[i+off] = sqrt((double)(i+off));
+	MTXSTAT(wStatuses[id], 2, wMtx[id]);
 }
 
 
@@ -37,9 +32,9 @@ int main(){
 		{init_lsthread(workers+i);start_lsthread(workers+i);}
 	for(int i = 0; i < NWORKERS; i++)
 		wMtx[i] = (pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
-
-	workers[0].execute = workerFuncPow;
-	workers[1].execute = workerFuncSqrt;
+	for(size_t i = 0; i < NWORKERS; i++)
+		{workers[i].argument = (void*)i;workers[i].execute = workerFuncSqrt;}
+	
 	
 	//RELEASE THE KRAKENS!
 	for(int i = 0; i < NWORKERS; i++)
@@ -60,8 +55,6 @@ int main(){
 		}
 	for(int i = 0; i < SQRT_COUNT; i++)
 		printf("sqrt(%d) = %f\n",i,sqrtData[i]);
-	for(int i = 0; i < POW_COUNT; i++)
-		printf("pow(%d,3) = %f\n",i,powData[i]);
 	for(int i = 0; i < NWORKERS; i++)
 		{kill_lsthread(workers+i);destroy_lsthread(workers+i);}			
 }
