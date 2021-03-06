@@ -14,17 +14,16 @@ int wStatuses[NWORKERS] = {0};
 
 double sqrtData[SQRT_COUNT];
 double powData[POW_COUNT];
-//Each worker must have a unique function.
-//No, it's not a design flaw. it was a decision.
-//It forces you to write code that's easier to follow.
 
-void workerFuncPow(){
+//if you don't want to duplicate code, you can use arg.
+
+void workerFuncPow(void* arg){
 	for(int i = 0; i < SQRT_COUNT; i++)
 		powData[i] = pow((double)i, 3);	
 	MTXSTAT(wStatuses[0], 2, wMtx[0]);
 }
 
-void workerFuncSqrt(){
+void workerFuncSqrt(void* arg){
 	for(int i = 0; i < SQRT_COUNT; i++)
 		sqrtData[i] = sqrt((double)i);
 	MTXSTAT(wStatuses[1], 2, wMtx[1]);
