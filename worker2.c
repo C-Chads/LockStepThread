@@ -30,7 +30,7 @@ void workerFuncSqrt(void* arg){
 	for(size_t i = 0; i < (SQRT_COUNT / NWORKERSSQRT) && (i+off < SQRT_COUNT); i++)
 		sqrtData[i+off] = sqrt((double)(i+off));
 	//Indicate that this worker is available for new tasks to be assigned.
-	mypool_set_worker_status(tid, 2);
+	mypool_set_worker_status(tid, 0);
 }
 
 void workerFuncPow(void* arg){
@@ -41,7 +41,7 @@ void workerFuncPow(void* arg){
 	for(size_t i = 0; i < (POW_COUNT / NWORKERSPOW) && (i+off < POW_COUNT); i++)
 		powData[i+off] = pow((double)(i+off),3);
 	//Indicate that this worker is available for new tasks to be assigned.
-	mypool_set_worker_status(tid, 2);
+	mypool_set_worker_status(tid, 0);
 }
 
 

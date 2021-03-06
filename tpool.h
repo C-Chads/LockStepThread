@@ -66,7 +66,7 @@ static inline void name##_set_worker_status(size_t tid, int val){			\
 static inline int name##_tryAssignTask(void (*func)(void*), argstruct in){	\
 	for(size_t i = 0; i < TPOOL_NWORKERS; i++){								\
 		int a = name##_get_worker_status(i);								\
-		if(a != 1){															\
+		if(a == 0){															\
 			/*MTXSTAT(name##wStatuses[i],1, name##wMtx[i]);*/				\
 			name##wStatuses[i] = 1;											\
 			lock(name##workers+i);	/*Lock the worker.*/					\
